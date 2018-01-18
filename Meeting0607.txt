@@ -1,0 +1,70 @@
+Environment
+
+PATH
+VECTORCAST_DIR
+VECTOR_LICENSE_FILE
+
+
+Embedded cover options
+
+Buffered not realtime. Because there is no output path while we are running
+
+Instrument blocks for statement coverage. Because it uses less code and RAM space.
+
+Instrument using macros in c_cover.h
+
+Because instrumentation is inline in the UUT, not a function call to c_cover_io, therefore
+faster and should be smaller, but check the linker map.
+
+License probe points. Goes to Stuart. Sorted.
+
+MCDC macro or function call
+
+Basis path is a topic for unit testing, but can have a mini lab. But MCDC
+
+Cover bytes used it is out of date. Craig.
+
+Look for inline functions.
+
+vcdb2vcm with instrument none. Intended behaviour for c_cover_io.c.
+
+GUI indication that a UUT is instrumented for probe points.
+
+Clicast Cover instrument probe point
+
+Before apply the probe point is not in the source file (not instrumented)
+
+The Remove all is not sufficient, because we want to remove some but not all.
+
+vcdb2vcm. Is there instrument for probe point?
+
+After a DIIP and delta to UUT and EIIP are the pps re-applied when manage reinstruments.
+What cli is needed to trigger this?
+
+Autotool to enable / disable probe points. Adding/Removing code.
+Enable / disable probe points at run time.
+
+Total instrumented PPs is 1000, but not much more.
+
+__PPID__. Allows us to get the probe point ID in the function. In our case it is used as
+the first parameter to the VCAST_PP_SaveFuncParms.
+
+Read probe points from XML.
+
+Header collapse. None is good.
+
+VCAST_PP_SaveFuncParms(i, a, b, c)
+
+Does multi put zeroes in array. Yes.
+
+Does Simon's code behave if there is a store to a disabled PPSave. Yes.
+
+Is there a MCDC problem in IoHwAbstr?
+
+Is there a probe point ID problem?
+
+IoHwAbsrSetDiscrete() called
+
+FFDD8004. Counter periodicity works.
+
+Send supplementary powerpoint.

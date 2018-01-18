@@ -1,0 +1,64 @@
+Associating function IDs in a resilient manner
+
+Example C code snippet.
+int test1(int parm1, int parm2)
+{
+...
+}
+int test_again_2(int parm1)
+{
+...
+}
+
+We want probe points to add an identifier for the 'record' function.
+
+int test1(int parm1, int parm2)
+{
+ RecordFunc_2(1, parm1, parm2);
+...
+}
+int test_again_2(int parm1)
+{
+ RecordFunc_1(2, parm1);
+...
+}
+
+However there is risk in accidentally using the same ID twice, or not using the
+correct ID in the verification code.
+
+A solution is to defer the assignment of the ID by using a #define. In the following
+code the tester adds the function name after 'ID_'.
+__FUNC__ might be an option at the probe point (i.e. ID_##__FUNC__).
+This cannot be used in the verification code.
+
+int test1(int parm1, int parm2)
+{
+ RecordFunc_2(ID_test1, parm1, parm2);
+...
+}
+
+int test_again_2(int parm1)
+{
+ RecordFunc_1(ID_test_again_2, parm1);
+...
+}
+
+These probe points do not compile at this point, but that does not matter.
+The tester calls the 'up and coming' clicast get probe points call.
+
+We should get information of the form function name and ID. Probably a lot more.
+Then use a simple Python script to create a header file (ProbePointHeader.h) from this
+information.
+
+#define ID_test1 42
+#define ID_test_again_2 442
+
+Just the once we add ProbePointHeader.h into Tools -> C/C++ -> Misc -> Preprocess preinclude file.
+
+The probe points can now be compiled.
+
+The verification code is
+VerifyFunc_2(ID_test1, &parm1, &parm2);
+VerifyFunc_1(ID_test_again_2, &parm1);
+
+Hopefully this will minimise the possibility of errors.

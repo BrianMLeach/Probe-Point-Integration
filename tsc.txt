@@ -1,0 +1,13 @@
+Read tsc for ARM
+
+unsigned cc;
+asm volatile("mrc p15, 0, %0, c15, c12, 1" : "=r" (cc));
+return cc;
+
+//user mode enable. Unlikely to be necessary
+asm volatile("mcr p15, 0 %0, c15, c9, 0\n" : "r"(1));
+
+
+Read tsc for RH850.
+
+I have not been able to find this. Does it exist?

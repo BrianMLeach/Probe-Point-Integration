@@ -1,0 +1,63 @@
+CCAST_.CFG content.
+-------------------
+
+Only need
+C_COMPILE_CMD
+and
+C_ALT_COMPILE_CMD if you are using mixed c/c++
+
+
+Filelist.txt (only one file).
+-----------------------------
+
+Make of source needs to be a clean make.
+Intermediate files must be writable.
+
+
+FILTER_PATTENS=[]
+-----------------
+
+This is OK.
+
+
+Probe points in menu bar not accessible.
+----------------------------------------
+
+FB 59063. Click outside the source file item and select it again. The probe point tool bar control
+will be enabled. This is a recent issue and should be fixed soon.
+
+
+Coverage files needed.
+----------------------
+
+I don't think it is a good idea to rely on files in the environment directory. VC has commands for
+dealing with this.
+
+To export coverage.
+
+Coverage -> Export script -> All results.
+
+To import coverage.
+
+Coverage -> Delete imported results.
+Coverage -> Import script
+
+This cannot be easily carried out on the command line because Delete imported results is not implemented.
+
+WARNING: Source files are checksummed before instrumentation. The source must stay the same for these
+commands to work correctly.
+
+Coverage scenario.
+------------------
+
+Each tester has an environment with exactly the same source files as the master environment. They
+accumulate coverage into their environment.
+At some point their accumulated results are exported to the master environment. This may be carried
+out more than once, but be careful about duplicated results. Although not harmful they do clutter the
+reports.
+Also recommend coverage test result names are unique across the whole test base. For example prepend
+the testers initials to the test result name.
+
+Probe point scenario.
+---------------------
+

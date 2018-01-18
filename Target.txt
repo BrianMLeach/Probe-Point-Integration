@@ -1,0 +1,35 @@
+Example probe point code
+At global scope
+int vcast_done_dump = 0;
+extern void VCAST_DUMP_COVERAGE_DATA();
+extern void vcast_trigger_breakpoint();
+Just before the return statement in the manager_driver main()
+if (vcast_done_dump == 0)
+{
+  vcast_done_dump = 1;
+  VCAST_DUMP_COVERAGE_DATA();
+  vcast_trigger_breakpoint();
+}
+ 
+ 
+Example compile command
+set PATH=%VECTORCAST_DIR%\mingw\bin;%PATH%
+gcc -DVCAST_CUSTOM_STD_OUTPUT -DVCAST_USE_STDOUT -DVCAST_CUSTOM_STD_OUTPUT_EXTERNAL=vcast_custom_std_output_external -g -o manager_driver.exe manager_driver.c manager.c database.c ..\cover\c_cover_io.c  vcast_custom_std_output_external.c
+ 
+gdb.ini
+Note the printf command requires that we compile and link with debug enabled -g
+break vcast_trigger_breakpoint
+commands
+set logging on
+printf "%s",vcast_ascii_coverage_data_pool
+set logging off
+continue
+end
+run
+quit
+kill
+ 
+command to run gdb
+gdb -x gdb.ini manager_driver.exe
+ 
+ 

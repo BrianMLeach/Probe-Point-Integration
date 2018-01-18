@@ -1,0 +1,36 @@
+Merging probe points
+--------------------
+
+Hella have a number of testers. They all use their individual environments and are creating
+probe points in order to test functions. Similar to the way VC does expected results in
+a stubbed function.
+
+At some point they need to merge all those probe points into the master environment.
+
+Is probe_points.xml good enough?
+
+The answer is I think yes.
+It holds a unit, function, enabled, applied, an ID and an allowed position.
+
+The problem is the unit which represents the source file name is only a number, not the
+actual file name. However the file name along with its unit number is in the .vcp file.
+
+In a poorly architected solution we look at probe_points.xml and the .vcp file to get the
+information needed. This would need a fairly straightforward python script.
+
+In an architected solution we need the new clicast probe point list call.
+
+The files produced need to be merged together. How do we know testers have not created
+conflicting probe points? This may just need to be a rule of use. For example only one tester
+is allowed to add probe points in a given module.
+
+Then they need to be imported and once again there is a poorly architected and an architected
+solution.
+
+The lists are merged which may just be as easy as 'cating' the files together.
+In the poorly architected solution probe_points.xml is updated with reference to the master
+.vcp file.
+
+In the architected solution we call a new clicast probe points add call. Problem is that does
+not exist and isn't even specified yet.
+
