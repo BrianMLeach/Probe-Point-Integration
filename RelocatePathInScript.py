@@ -122,9 +122,30 @@ def regression_rebase(i_strSourceBat, i_strDestBat, i_strSourceEnv, i_strDestEnv
       (line.find('cover source unit_options') >= 0) or \
       (line.find('cover append_cover_io') >= 0):
       line = replace_fs(line, i_strDestDir, i_strSourceDir, fs_case_sensitive)
+      
+#Brian Leach 19/2/2018. These options use a double \\ syntax.
+    if (line.find('VCAST_ENVIRONMENT_FILES') >= 0) or \
+       (line.find('VCAST_CMD_AFTER_INSTRUMENTATION') >= 0):
+      line = line.replace(os.sep + os.sep, os.sep)
+      line = replace_fs(line, i_strDestDir, i_strSourceDir, fs_case_sensitive)
+      line = line.replace(os.sep, os.sep + os.sep)
   
     dest_bat_file.write(line)
 
+#Brian Leach 19/2/2018. This is a temporary work around for a bug in VC up to 
+#6.4.2 where build_info.xml is incorrect and instrumentation fails. Once fixed,
+#the following lines to the next blank line should be removed.
+  source_bat_file.seek(0, 0)
+  for line in source_bat_file:
+    if line.find('echo cover environment create ') >= 0:
+      vc = os.environ(r'VECTORCAST_DIR')
+      cd = os.environ(r'VCAST_CD')
+      line = line.replace('echo cover environment create ', '')
+      line = line.replace(' >> commands.tmp\n', '')
+      dest_bat_file.write(vc + r'\vpython ' + cd + r'\BuildInfoFix.py ' + \
+                          i_strDestEnv + os.sep + line + os.sep + 'build_info.xml\n')
+      break
+  
   source_bat_file.close()
   dest_bat_file.close()
                             
@@ -137,12 +158,12 @@ def regression_rebase(i_strSourceBat, i_strDestBat, i_strSourceEnv, i_strDestEnv
        
   return True
 
-# Strip the end separator unless the path is of form 'd:\'
+# Strip the end separator
 def strip_os_sep(i_strPath):
   nLen = len(i_strPath)
   if nLen > 1:
     if i_strPath[-1:] == os.sep:
-      if (nLen != 3) or (i_strPath[1] != ':'):
+      #if (nLen != 3) or (i_strPath[1] != ':'):		#Line commented as this is a bug as per the discussion with Brian (rokaga1 19/1/2018)
         i_strPath = i_strPath[:-1]
   return i_strPath
     
